@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateComputation()));
     timer->start(30);
+
+    //load Classifier
+    _classifier.load("./haarcascade_frontalface_alt.xml");
 }
 
 MainWindow::~MainWindow()
@@ -59,6 +62,7 @@ void MainWindow::getDialogClick(const QRgb &color)
     int g = qGreen(color);
     int b = qBlue(color);
     ui->label_selected_color->setText(QString::number(r)+"\t"+QString::number(g)+"\t"+QString::number(b));
+    _color_selected = color;
 }
 
 bool captureInit = false;
@@ -111,14 +115,102 @@ void MainWindow::showCapture(DialogImg* dialog, const Mat &frame, const QString 
 
 void MainWindow::updateFaceTracking()
 {
-    // TODO : gérez le color tracking
     _frame.copyTo(_face);
+
+    // Décommenter ci-dessous pour le face tracking
+    // Detect faces
+    std::vector<Rect> faces;
+    //_classifier.detectMultiScale( _face, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
+
+//    // Draw circles on the detected faces
+//    Rect Face;
+//    for( int i = 0; i < faces.size(); i++ )
+//    {
+//        if (faces.at(i).height*faces.at(i).width>Face.width*Face.height){
+//            Face = faces.at(i);
+//        }
+//    }
+    //Point center( Face.x + Face.width*0.5, Face.y + Face.height*0.5 );
+    //ellipse( _face, center, Size( Face.width*0.5, Face.height*0.5), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
 }
 
 void MainWindow::updateColorTracking()
 {
     // TODO : gérez le color tracking
     _frame.copyTo(_color);
+
+    //Affichage des values de threshold
+    ui->RThresholdValue->setText(QString::number(ui->R_slider->value()));
+    ui->GThresholdValue->setText(QString::number(ui->G_slider->value()));
+    ui->BThresholdValue->setText(QString::number(ui->B_slider->value()));
+
+    int Bmin = qBlue(_color_selected)-ui->B_slider->value();
+    int Gmin = qGreen(_color_selected)-ui->G_slider->value();
+    int Rmin = qRed(_color_selected)-ui->R_slider->value();
+    int Bmax = qBlue(_color_selected)+ui->B_slider->value();
+    int Gmax = qGreen(_color_selected)+ui->G_slider->value();
+    int Rmax = qRed(_color_selected)+ui->R_slider->value();
+
+    ui->Bmin->setText(QString::number(Bmin));
+    ui->Gmin->setText(QString::number(Gmin));
+    ui->Rmin->setText(QString::number(Rmin));
+    ui->Bmax->setText(QString::number(Bmax));
+    ui->Gmax->setText(QString::number(Gmax));
+    ui->Rmax->setText(QString::number(Rmax));
+
+    //Update de mask avec les plages de couleurs
+    Mat mask; //matrice d'affichage du colortracking en noir
+    Mat invMask;
+    inRange(_color,Scalar(Bmin,Gmin,Rmin), Scalar(Bmax,Gmax,Rmax),mask);
+    bitwise_not(mask,invMask);
+
+    //SimpleBlobDetector
+    // Paramètres
+    SimpleBlobDetector::Params params;
+    //params.minThreshold = 49;
+    //params.maxThreshold = 50;
+    params.filterByArea = true;
+    params.minArea = 2000;
+    params.maxArea = 307200;
+    params.filterByCircularity = true;
+    params.minCircularity = 0;
+    params.maxCircularity = 1;
+    params.filterByConvexity = true;
+    params.minConvexity = 0;
+    params.maxConvexity = 1;
+    params.filterByInertia = true;
+    params.minInertiaRatio = 0;
+    params.maxInertiaRatio = 1;
+    //params.minInertiaRatio = 0.001;
+    //Detector sur le masque binaire
+    SimpleBlobDetector detector(params);
+    std::vector<KeyPoint> keypoints;
+    detector.detect(invMask,keypoints);
+
+    //Selection du blob le plus gros
+    float maxS = 0;
+    KeyPoint KPmax;
+    for (unsigned int i=0;i<keypoints.size();i++){
+        KeyPoint KPi = keypoints.at(i);
+        if (KPi.size>maxS)
+            KPmax = keypoints.at(i);
+    }
+    //std::cout << KPmax.size<< std::endl;
+    std::vector<KeyPoint> MaxKP;
+    MaxKP.push_back(KPmax);
+
+
+    //Affichage
+    drawKeypoints( invMask, keypoints, invMask, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+    //rectangle(_color,p1,p2,Scalar());
+    imshow ("invMask",invMask);
+    _color.setTo(0,mask);//color
+    Mat im_with_keypoints; //keypoints
+
+    drawKeypoints( _color, MaxKP, im_with_keypoints, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+    imshow("keypoints", im_with_keypoints );
+
+
 }
 
 void MainWindow::on_btn_quit_clicked()

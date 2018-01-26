@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>267</width>
-    <height>132</height>
+    <width>406</width>
+    <height>264</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,26 +16,172 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="label">
-        <property name="maximumSize">
-         <size>
-          <width>110</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>selected color : </string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="maximumSize">
+           <size>
+            <width>110</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>selected color : </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_selected_color">
+          <property name="text">
+           <string>ni	ni	ni</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5"/>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_selected_color">
-        <property name="text">
-         <string>ni	ni	ni</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Threshold R</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="R_slider">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+          <property name="value">
+           <number>45</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="RThresholdValue">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Threshold G</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="G_slider">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+          <property name="value">
+           <number>33</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="GThresholdValue">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Threshold B</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="B_slider">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+          <property name="value">
+           <number>36</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="BThresholdValue">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="Rmin">
+          <property name="text">
+           <string>Rmin</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Rmax">
+          <property name="text">
+           <string>Rmax</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Gmin">
+          <property name="text">
+           <string>Gmin</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Gmax">
+          <property name="text">
+           <string>Gmax</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Bmin">
+          <property name="text">
+           <string>Bmin</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Bmax">
+          <property name="text">
+           <string>Bmax</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -83,13 +229,19 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>267</width>
-     <height>25</height>
+     <width>406</width>
+     <height>19</height>
     </rect>
    </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>B_slider</tabstop>
+  <tabstop>G_slider</tabstop>
+  <tabstop>R_slider</tabstop>
+  <tabstop>btn_quit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -43,6 +43,8 @@ private:
     Mat _frame;
     Mat _face;
     Mat _color;
+    QRgb _color_selected;
+    CascadeClassifier _classifier;
 };
 
 #endif // MAINWINDOW_H
