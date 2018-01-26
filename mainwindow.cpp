@@ -5,6 +5,7 @@
 DialogImg* frame_rgb;
 DialogImg* frame_face;
 DialogImg* frame_color;
+bool MaskisVisible = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -124,7 +125,7 @@ void MainWindow::updateFaceTracking()
 
     // Draw circles on the detected faces
     Rect Face;
-    for( int i = 0; i < faces.size(); i++ )
+    for( uint i = 0; i < faces.size(); i++ )
     {
         if (faces.at(i).height*faces.at(i).width>Face.width*Face.height){
             Face = faces.at(i);
@@ -166,8 +167,8 @@ void MainWindow::updateColorTracking()
     int erodeIterations = ui->erodeIter->value();
     int dilateN  = ui->erodeN->value();
     int dilateIterations = ui->erodeIter->value();
-    erode(mask,mask,getStructuringElement(MORPH_RECT, Size(erodeN*2+1, erodeN*2+1), Point(erodeN, erodeN)),Point(-1,-1),erodeIterations);
-    dilate(mask,mask,getStructuringElement(MORPH_RECT, Size(dilateN*2+1, dilateN*2+1), Point(dilateN, dilateN)),Point(-1,-1),dilateIterations);
+    erode(mask,mask,getStructuringElement(MORPH_ERODE, Size(erodeN*2+1, erodeN*2+1), Point(erodeN, erodeN)),Point(-1,-1),erodeIterations);
+    dilate(mask,mask,getStructuringElement(MORPH_DILATE, Size(dilateN*2+1, dilateN*2+1), Point(dilateN, dilateN)),Point(-1,-1),dilateIterations);
     bitwise_not(mask,invMask);
 
     //SimpleBlobDetector
@@ -187,6 +188,8 @@ void MainWindow::updateColorTracking()
     params.filterByInertia = true;
     params.minInertiaRatio = 0;
     params.maxInertiaRatio = 1;
+    ui->Ed->setText(QString::number(ui->erodeN->value()));
+    ui->Niter->setText(QString::number(ui->erodeIter->value()));
 
     //Detector sur le masque binaire
     SimpleBlobDetector detector(params);
@@ -204,10 +207,11 @@ void MainWindow::updateColorTracking()
     std::vector<KeyPoint> MaxKP;
     MaxKP.push_back(KPmax);
 
+
     //Affichage
-    _color.setTo(0,mask);
+    if(MaskisVisible)
+        _color.setTo(0,mask);
     drawKeypoints( _color, MaxKP, _color, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-    //rectangle(_color,p1,p2,Scalar());
 
 
 }
@@ -215,4 +219,9 @@ void MainWindow::updateColorTracking()
 void MainWindow::on_btn_quit_clicked()
 {
     exit(EXIT_SUCCESS);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    MaskisVisible = !MaskisVisible;
 }

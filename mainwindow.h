@@ -28,6 +28,8 @@ private slots:
 
     void on_btn_quit_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     void init();
     void initCapture();
@@ -35,6 +37,7 @@ private:
     void showCapture(DialogImg *dialog, const Mat& frame, const QString& title);
     void updateFaceTracking();
     void updateColorTracking();
+    Rect findBiggestBlob(cv::Mat & mask);
 
 private:
     Ui::MainWindow *ui;

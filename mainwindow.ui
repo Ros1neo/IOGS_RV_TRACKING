@@ -140,7 +140,7 @@
       <item>
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Treshold values</string>
+         <string>Threshold values : Rmin Rmax Gmin Gmax Bmin Bmax</string>
         </property>
        </widget>
       </item>
@@ -195,7 +195,7 @@
         <item>
          <widget class="QLabel" name="label_7">
           <property name="text">
-           <string>Erode</string>
+           <string>Erode/Dilate</string>
           </property>
          </widget>
         </item>
@@ -204,8 +204,18 @@
           <property name="minimum">
            <number>1</number>
           </property>
+          <property name="value">
+           <number>5</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Ed">
+          <property name="text">
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -216,7 +226,7 @@
         <item>
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>Erode iterations</string>
+           <string>Number of iterations</string>
           </property>
          </widget>
         </item>
@@ -228,53 +238,18 @@
           <property name="maximum">
            <number>10</number>
           </property>
+          <property name="value">
+           <number>2</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <widget class="QLabel" name="label_8">
+         <widget class="QLabel" name="Niter">
           <property name="text">
-           <string>Dilate</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="dilateN">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_11">
-        <item>
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Dilate iterations</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="dilateIter">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <string>Niter</string>
           </property>
          </widget>
         </item>
@@ -296,6 +271,19 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Masque</string>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btn_quit">
