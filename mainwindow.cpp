@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(30);
 
     //load Classifier
-    _classifier.load("./haarcascade_frontalface_alt.xml");
+    _classifier.load("../IOGS_RV_TRACKING/haarcascade_frontalface_alt.xml");
 }
 
 MainWindow::~MainWindow()
@@ -120,18 +120,18 @@ void MainWindow::updateFaceTracking()
     // Décommenter ci-dessous pour le face tracking
     // Detect faces
     std::vector<Rect> faces;
-    //_classifier.detectMultiScale( _face, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
+    _classifier.detectMultiScale( _face, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
 
-//    // Draw circles on the detected faces
-//    Rect Face;
-//    for( int i = 0; i < faces.size(); i++ )
-//    {
-//        if (faces.at(i).height*faces.at(i).width>Face.width*Face.height){
-//            Face = faces.at(i);
-//        }
-//    }
-    //Point center( Face.x + Face.width*0.5, Face.y + Face.height*0.5 );
-    //ellipse( _face, center, Size( Face.width*0.5, Face.height*0.5), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
+    // Draw circles on the detected faces
+    Rect Face;
+    for( int i = 0; i < faces.size(); i++ )
+    {
+        if (faces.at(i).height*faces.at(i).width>Face.width*Face.height){
+            Face = faces.at(i);
+        }
+    }
+    Point center( Face.x + Face.width*0.5, Face.y + Face.height*0.5 );
+    ellipse( _face, center, Size( Face.width*0.5, Face.height*0.5), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
 }
 
 void MainWindow::updateColorTracking()
@@ -207,8 +207,8 @@ void MainWindow::updateColorTracking()
     _color.setTo(0,mask);//color
     Mat im_with_keypoints; //keypoints
 
-    drawKeypoints( _color, MaxKP, im_with_keypoints, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-    imshow("keypoints", im_with_keypoints );
+    drawKeypoints( _color, MaxKP, _color, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
+    //imshow("keypoints", im_with_keypoints );
 
 
 }
