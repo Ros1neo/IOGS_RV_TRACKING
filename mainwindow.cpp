@@ -160,8 +160,14 @@ void MainWindow::updateColorTracking()
 
     //Update de mask avec les plages de couleurs
     Mat mask; //matrice d'affichage du colortracking en noir
-    Mat invMask;
+    Mat invMask; //mask inversé
     inRange(_color,Scalar(Bmin,Gmin,Rmin), Scalar(Bmax,Gmax,Rmax),mask);
+    int erodeN  = ui->erodeN->value();
+    int erodeIterations = ui->erodeIter->value();
+    int dilateN  = ui->erodeN->value();
+    int dilateIterations = ui->erodeIter->value();
+    erode(mask,mask,getStructuringElement(MORPH_RECT, Size(erodeN*2+1, erodeN*2+1), Point(erodeN, erodeN)),Point(-1,-1),erodeIterations);
+    dilate(mask,mask,getStructuringElement(MORPH_RECT, Size(dilateN*2+1, dilateN*2+1), Point(dilateN, dilateN)),Point(-1,-1),dilateIterations);
     bitwise_not(mask,invMask);
 
     //SimpleBlobDetector
@@ -181,7 +187,7 @@ void MainWindow::updateColorTracking()
     params.filterByInertia = true;
     params.minInertiaRatio = 0;
     params.maxInertiaRatio = 1;
-    //params.minInertiaRatio = 0.001;
+
     //Detector sur le masque binaire
     SimpleBlobDetector detector(params);
     std::vector<KeyPoint> keypoints;
@@ -195,20 +201,13 @@ void MainWindow::updateColorTracking()
         if (KPi.size>maxS)
             KPmax = keypoints.at(i);
     }
-    //std::cout << KPmax.size<< std::endl;
     std::vector<KeyPoint> MaxKP;
     MaxKP.push_back(KPmax);
 
-
     //Affichage
-    drawKeypoints( invMask, keypoints, invMask, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-    //rectangle(_color,p1,p2,Scalar());
-    imshow ("invMask",invMask);
-    _color.setTo(0,mask);//color
-    Mat im_with_keypoints; //keypoints
-
+    _color.setTo(0,mask);
     drawKeypoints( _color, MaxKP, _color, Scalar(0,0,255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS );
-    //imshow("keypoints", im_with_keypoints );
+    //rectangle(_color,p1,p2,Scalar());
 
 
 }
