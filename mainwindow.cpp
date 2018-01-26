@@ -118,7 +118,7 @@ void MainWindow::updateFaceTracking()
 {
     _frame.copyTo(_face);
 
-    // Décommenter ci-dessous pour le face tracking
+
     // Detect faces
     std::vector<Rect> faces;
     _classifier.detectMultiScale( _face, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
